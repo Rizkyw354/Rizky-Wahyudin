@@ -23,6 +23,7 @@ class Masuk_model extends CI_Model
         ];
         $this->db->insert($this->_table, $data);
     }
+    //simpan gambar
     public function uploadImage()
     {
         $config['upload_path'] = './assets/photo/surat_masuk/';
@@ -65,9 +66,6 @@ class Masuk_model extends CI_Model
             'is_active' => '1',
         ];
         return $this->db->set($data)->where($this->primary, $id)->update($this->_table);
-        // if($this->db->affected_rows()>0){
-        // $this->session->set_flashdata("success","Data user Berhasil DiUpdate");
-        // }
     }
     public function delete($id)
     {
@@ -84,5 +82,21 @@ class Masuk_model extends CI_Model
             $filename = explode(".", $surat->image)[0];
             return array_map('unlink', glob(FCPATH . "assets/photo/surat_masuk/$filename.*"));
         }
+    }
+    public function saveAjuan()
+    {
+        $data = [
+            'no_surat' => $this->input->post('no_surat'),
+            'tgl_surat' => $this->input->post('tgl_surat'),
+            'surat_from' => $this->input->post('surat_from'),
+            'surat_to' => $this->input->post('surat_to'),
+            'tgl_terima' => '0000-00-00',
+            'perihal' => $this->input->post('perihal'),
+            'keterangan' => $this->input->post('keterangan'),
+            'image' => $this->uploadImage(),
+            'user_id' => $this->session->userdata('id'),
+            'is_active' => '1',
+        ];
+        $this->db->insert($this->_table, $data);
     }
 }
